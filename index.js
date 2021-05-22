@@ -41,7 +41,7 @@ pdf(dataBuffer).then(function(data) {
     x = new Set(result)
     // console.log(x)
     result = Array.from(x);
-    let finalArray = []
+    let finalObject = []
     let obj = {}
     for (i=0; i<result.length-1;i++){
         obj = {}
@@ -71,6 +71,8 @@ pdf(dataBuffer).then(function(data) {
         obj.marks = []
 
         obj2 = {}
+        total = 0
+        t2 = 0
         for(j=0;j<subjectCodes.length;j++){
             obj2 = {}
             let marks = res.slice(res.lastIndexOf(subjectCodes[j]),res.lastIndexOf(subjectCodes[j+1]))
@@ -79,19 +81,51 @@ pdf(dataBuffer).then(function(data) {
             var fMarks = marks2[2].slice(0,2)
             else 
             fMarks = 0
+            grade = 0
+            fMarks = parseInt(fMarks)
+            if(fMarks>89)
+            grade = 10
+            else if(fMarks>74)
+            grade = 9
+            else if(fMarks>64)
+            grade = 8
+            else if(fMarks>54)
+            grade = 7
+            else if(fMarks>49)
+            grade = 6
+            else if(fMarks>44)
+            grade = 5
+            else if(fMarks>39)
+            grade = 4
+            else
+            grade = 0
+
+            total += grade*parseInt(subjectCodes[j].slice(-2,-1))
+            t2 += parseInt(subjectCodes[j].slice(-2,-1))
             obj2.sub = subjectCodes[j]
             obj2.score = fMarks
             obj.marks.push(obj2)
             // console.log('\n',i,'\n',fMarks)
         }
+        obj.cgpa = total/t2
         // console.log(i)
         // obj.subjects = subjectCode
-        finalArray.push(obj)
+        finalObject.push(obj)
         // console.log('start-------->', res,'<-----------end')
         // if(result[word] == 41411503118)
         // console.log(ind)
     }
-    for(i=0;i<finalArray.length;i++)
-    console.log(finalArray[i]) 
-    // console.log(finalArray.length)
+    // for(i=0;i<finalObject.length;i++)
+    // if(finalObject[i].rollNum == 41411503118)
+    // console.log(finalObject[i]) 
+    console.log(typeof finalObject)
+    var finalJson = JSON.stringify(finalObject);
+    console.log(typeof finalJson)
+    fs.writeFile('IT.json', finalJson, (err) => {
+        if (err) {
+            throw err;
+        }
+        console.log("JSON data is saved.");
+    });
 });
+
