@@ -1,6 +1,9 @@
 var fs=require('fs');
 var data=fs.readFileSync('IT.json');
+var data2=fs.readFileSync('CSE.json');
 var elements=JSON.parse(data);
+var elements2=JSON.parse(data2);
+
 const express = require("express");
 const app = express();
 const cors=require('cors');
@@ -9,30 +12,14 @@ app.listen(3000, () => console.log("Server Start at 3000 Port"));
 
 app.use(express.static('public'));
 app.use(cors());
-app.get('/elements',alldata);
+app.get('/IT',alldata);
 function alldata(request,response)
-{
+{     
     response.send(elements);
 }
-app.get('/elements/:element/',searchElement);
-function searchElement(request,response)
-{
-	var word=request.params.element;
-	word=word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
-	console.log(word);
-	//console.log(elements[word]);
-	if(elements[word])
-	{
-		var reply=elements[word];
-		
-	}
-	else
-	{
-		var reply={
-			status:"Not Found"
-		}
-	}
-    console.log(reply.boil);
-	response.send(reply);
 
+app.get('/CSE',alldata2);
+function alldata2(request,response)
+{
+    response.send(elements2);
 }
